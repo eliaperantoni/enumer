@@ -16,6 +16,18 @@ func %[1]sString(s string) (%[1]s, error) {
 
 // Arguments to format are:
 //	[1]: type name
+const stringNameToValueMethodPanic = `// Must%[1]sString retrieves an enum value from the enum constants string name.
+// Panics if the param is not part of the enum.
+func Must%[1]sString(s string) (%[1]s, error) {
+	if val, ok := _%[1]sNameToValueMap[s]; ok {
+		return val, nil
+	}
+	panic(fmt.Sprintf("%%s does not belong to %[1]s values", s))
+}
+`
+
+// Arguments to format are:
+//	[1]: type name
 const stringValuesMethod = `// %[1]sValues returns all values of the enum
 func %[1]sValues() []%[1]s {
 	return _%[1]sValues
@@ -78,6 +90,7 @@ func (g *Generator) buildBasicExtras(runs [][]Value, typeName string, runsThresh
 
 	// Print the basic extra methods
 	g.Printf(stringNameToValueMethod, typeName)
+	g.Printf(stringNameToValueMethodPanic, typeName)
 	g.Printf(stringValuesMethod, typeName)
 	if len(runs) <= runsThreshold {
 		g.Printf(stringBelongsMethodLoop, typeName)
