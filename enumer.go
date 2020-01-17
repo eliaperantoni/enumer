@@ -18,9 +18,9 @@ func %[1]sString(s string) (%[1]s, error) {
 //	[1]: type name
 const stringNameToValueMethodPanic = `// Must%[1]sString retrieves an enum value from the enum constants string name.
 // Panics if the param is not part of the enum.
-func Must%[1]sString(s string) (%[1]s, error) {
+func Must%[1]sString(s string) %[1]s {
 	if val, ok := _%[1]sNameToValueMap[s]; ok {
-		return val, nil
+		return val
 	}
 	panic(fmt.Sprintf("%%s does not belong to %[1]s values", s))
 }
